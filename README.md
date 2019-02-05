@@ -1,6 +1,12 @@
 # Master
 master node 
 _SERVICE master:
+----------------------------
+first create network :
+docker network create --driver overlay --attachable my-overlay-network
+must be overlay to work for  swarm and containers 
+must be attachable to attach containers to it
+----------------------------
 go to master folder 
 run:
 docker-compose up // up service to port 8083
