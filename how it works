@@ -1,0 +1,221 @@
+cloud
+start...
+
+first install ubuntu
+connect to wifi then disable ipv6 and set dns server to shecan.ir servers bellow:
+
+178.22.122.100
+94.232.174.194
+
+then start install DOCKER:
+
+First, update your existing list of packages:
+
+   $ sudo apt update
+
+Next, install a few prerequisite packages which let apt use packages over HTTPS:
+
+    sudo apt install apt-transport-https ca-certificates curl software-properties-common
+
+Then add the GPG key for the official Docker repository to your system:
+
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+Add the Docker repository to APT sources:
+
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+
+Next, update the package database with the Docker packages from the newly added repo:
+
+    sudo apt update
+
+Make sure you are about to install from the Docker repo instead of the default Ubuntu repo:
+
+    apt-cache policy docker-ce
+
+You'll see output like this, although the version number for Docker may be different:
+Output of apt-cache policy docker-ce
+
+docker-ce:
+  Installed: (none)
+  Candidate: 18.03.1~ce~3-0~ubuntu
+  Version table:
+     18.03.1~ce~3-0~ubuntu 500
+        500 https://download.docker.com/linux/ubuntu bionic/stable amd64 Packages
+
+Notice that docker-ce is not installed, but the candidate for installation is from the Docker repository for Ubuntu 18.04 (bionic).
+
+Finally, install Docker:
+
+    sudo apt install docker-ce
+
+
+
+
+
+
+
+
+
+
+
+
+
+....
+
+alien@alien:~$ docker network create cloud
+Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post http://%2Fvar%2Frun%2Fdocker.sock/v1.39/networks/create: dial unix /var/run/docker.sock: connect: permission denied
+alien@alien:~$ sudo docker network create cloud
+e96a8909f07ee224bc82967001a30596638c1e9302efc47d0290198fd4a7c81f
+alien@alien:~$ 
+
+
+..ngrok
+./ngrok  http 8084
+
+
+
+....run apache
+
+ sudo  docker run  --name server25  -p 8084:80 -v ~/Desktop/server:/var/www/public  pensiero/apache-php-mysql
+
+
+....copy file to docker
+sudo docker cp Desktop/sd/apache2.conf server25:/etc/apache2/apache2.conf
+alien@alien
+
+
+.....kill all
+
+sudo docker kill $(sudo docker ps -qa)
+sudo docker rm $(sudo docker ps -qa)
+
+docker-compose build --no-cache
+
+....run terminal
+sudo -H gnome-terminal 
+
+
+...
+sudo docker exec -i -t vote3 /bin/bash
+
+
+...
+ --network="host"
+
+sudo  docker run  --name vote6 --network="host"  -p 8085:80 -v ~/Desktop/vote:/var/www/public  pensiero/apache-php-mysql
+
+
+...
+docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag
+sudo  docker run --name mysql -e MYSQL_ROOT_PASSWORD=1234  -d mysql:8
+
+
+docker run --name some-app --link some-mysql:mysql -d application-that-uses-mysql
+
+sudo  docker run  --name vote11 -p 8085:80 -v ~/Desktop/vote:/var/www/public  --link db-mysql:mysql pensiero/apache-php-mysql
+
+...
+sudo docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mysql2
+
+172.17.0.2
+
+[mysqld]
+default_authentication_plugin= mysql_native_password
+
+
+sudo apt install docker-compose
+
+
+chmod 777 for access file
+
+
+
+
+.....................................................
+sudo docker-compose up
+[sudo] password for alien: 123456
+Creating dbmysql ... 
+Creating dbphp ... 
+Creating dbmysql
+Creating dbmysql ... done
+Creating dbapache ... 
+Creating dbapache ... done
+Attaching to dbphp, dbmysql, dbapache
+.....................................................
+
+sudo docker network rm auth_cloudnetwork auth_frontend     authcopy_backend  authcopy_frontend  cloud             db_backend        db_cloudnetwork   db_dbnetwork db_frontend       panel_backend     panel_frontend    php_backend       php_frontend      webcopy_backend webcopy_frontend 
+
+....
+sudo docker compose --file ~/Desktop/db/docker-compose.yml --file ~/Desktop/Auth/docker-compose.yml up -d
+
+
+
+......
+sudo docker swarm init
+[sudo] password for alien: 
+Sorry, try again.
+[sudo] password for alien: 
+Swarm initialized: current node (54n6zzd0m54s7ekhysq0alcsc) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join --token SWMTKN-1-0yul2d3txa54vo91efbhsok9w7b3xt37hviep31qxjlrakxn1j-eou7hvm52kq0laad9pptx845v 192.168.1.40:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+sudo docker stack deploy --compose-file docker-compose.yml election
+
+sudo docker stack rm election
+sudo docker network create --driver overlay --attachable my-overlay-network
+
+
+
+
+
+.........................
+
+each task
+
+ID:		6ixurl5jznlxmfv7g6fg65swr
+Name:		election_elapache
+Labels:
+ com.docker.stack.image=election_elapache:latest
+ com.docker.stack.namespace=election
+Service Mode:	Replicated
+ Replicas:	5
+Placement:
+UpdateConfig:
+ Parallelism:	1
+ On failure:	pause
+ Monitoring Period: 5s
+ Max failure ratio: 0
+ Update order:      stop-first
+RollbackConfig:
+ Parallelism:	1
+ On failure:	pause
+ Monitoring Period: 5s
+ Max failure ratio: 0
+ Rollback order:    stop-first
+ContainerSpec:
+ Image:		election_elapache:latest
+Mounts:
+ Target:	/var/www/html/
+  Source:	/home/alien/Desktop/election/public_html/
+  ReadOnly:	false
+  Type:		bind
+Resources:
+ Limits:
+  CPU:		0.1
+  Memory:	50MiB
+Networks: my-overlay-network 
+Endpoint Mode:	vip
+Ports:
+ PublishedPort = 8085
+  Protocol = tcp
+  TargetPort = 80
+  PublishMode = ingress 
+
+
+
+
